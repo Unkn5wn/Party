@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SHAHNAMEH Permutations</title>
+</head>
+<body>
+  <h2>All unique 5-letter permutations of "SHAHNAMEH" after removing two H's, all N's and E's</h2>
+  <ul id="results"></ul>
+
+  <script>
+    function getUniquePermutations(arr) {
+      arr.sort(); // Sort to handle duplicates
+      const results = [];
+      const used = Array(arr.length).fill(false);
+
+      function backtrack(path) {
+        if (path.length === arr.length) {
+          results.push(path.join(''));
+          return;
+        }
+        for (let i = 0; i < arr.length; i++) {
+          if (used[i]) continue;
+          if (i > 0 && arr[i] === arr[i-1] && !used[i-1]) continue; // Skip duplicates
+          used[i] = true;
+          path.push(arr[i]);
+          backtrack(path);
+          path.pop();
+          used[i] = false;
+        }
+      }
+      backtrack([]);
+      return results;
+    }
+
+    // Original: S H A H N A M E H
+    // Let's create an array after removing two H's, N, E:
+    const letters = ['S', 'A', 'A', 'M', 'H'];
+
+    const perms = getUniquePermutations(letters);
+
+    const resultsList = document.getElementById('results');
+    perms.forEach(p => {
+      const li = document.createElement('li');
+      li.textContent = p;
+      resultsList.appendChild(li);
+    });
+
+    // Optionally, show the total:
+    const totalCount = document.createElement('p');
+    totalCount.textContent = "Total unique permutations: " + perms.length;
+    document.body.insertBefore(totalCount, resultsList);
+  </script>
+</body>
+</html>
